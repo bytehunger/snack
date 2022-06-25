@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"io/ioutil"
-
-	cp "github.com/otiai10/copy"
 )
 
 var (
@@ -37,9 +35,9 @@ func main() {
 		panic("Could not render site")
 	}
 
-	err = cp.Copy("themes/"+site.Theme+"/assets", outputDir+"/assets")
+	err = site.CopyAssets(outputDir)
 
 	if err != nil {
-		panic("Could not copy assets")
+		panic("Could not copy assets.")
 	}
 }

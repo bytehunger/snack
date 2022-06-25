@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	cp "github.com/otiai10/copy"
+)
 
 type Site struct {
 	Title         string   `json:"title"`
@@ -22,4 +26,9 @@ func (s *Site) Render() error {
 	}
 
 	return nil
+}
+
+// Copy assets from the theme.
+func (s *Site) CopyAssets(outputDir string) error {
+	return cp.Copy("themes/"+s.Theme+"/assets", outputDir+"/assets")
 }
