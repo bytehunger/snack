@@ -30,5 +30,11 @@ func (s *Site) Render() error {
 
 // Copy assets from the theme.
 func (s *Site) CopyAssets(outputDir string) error {
-	return cp.Copy("themes/"+s.Theme+"/assets", outputDir+"/assets")
+	err := cp.Copy("themes/"+s.Theme+"/assets", outputDir+"/assets")
+
+	if err != nil {
+		return err
+	}
+
+	return cp.Copy("pictures/", outputDir+"/pictures")
 }
