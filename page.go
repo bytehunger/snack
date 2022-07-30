@@ -14,6 +14,11 @@ type Page struct {
 
 // Render renders a single page with all its widgets.
 func (p *Page) Render(site *Site) error {
+	data := struct {
+		*Page
+		Site *Site
+	}{p, site}
+
 	header, err := template.ParseFiles("themes/" + site.Theme + "/header.html.tpl")
 
 	if err != nil {
@@ -41,7 +46,7 @@ func (p *Page) Render(site *Site) error {
 
 	defer f.Close()
 
-	err = header.Execute(f, p)
+	err = header.Execute(f, data)
 
 	if err != nil {
 		return err
@@ -81,7 +86,7 @@ func (p *Page) Render(site *Site) error {
 		}
 	}
 
-	err = footer.Execute(f, p)
+	err = footer.Execute(f, data)
 
 	return err
 }

@@ -13,6 +13,7 @@ type Site struct {
 	Languages     []string `json:"languages"`
 	Pages         []Page   `json:"pages"`
 	GlobalWidgets []Widget `json:"globalWidgets"`
+	Favicon       string   `json:"favicon"`
 }
 
 // Render renders the site with all its pages.
