@@ -1,43 +1,51 @@
 package main
 
 import (
-	"encoding/json"
+	"errors"
 	"flag"
-	"io/ioutil"
 )
 
-var (
-	inputFile string
-	outputDir string
-)
-
+// Entrypoint of program
 func main() {
-	flag.StringVar(&inputFile, "input", "site.json", "The main site JSON file")
-	flag.StringVar(&outputDir, "output", "/public", "The directory where")
+	adapterPtr := flag.String("a", "file", "The adapter (default: file)")
 	flag.Parse()
 
-	file, err := ioutil.ReadFile(inputFile)
+	adapter, err := NewAdapter(*adapterPtr, flag.Args())
 
 	if err != nil {
-		panic("Could not read file: " + inputFile)
+		panic(err)
 	}
 
-	var site Site
-	err = json.Unmarshal([]byte(file), &site)
+	generator := NewGenerator(adapter)
+	err = generator.Generate()
 
 	if err != nil {
-		panic("Could not parse site")
+		panic(err)
+	}
+}
+
+// NewAdapter returns the right adapter for given argument.
+func NewAdapter(name string, args []string) (a Adapter, err error) {
+	if len(args) != 1 {
+		err = errors.New("wrong number of arguments")
+		return
 	}
 
-	err = site.Render()
-
-	if err != nil {
-		panic("Could not render site")
+	switch name {
+	case "file":
+		a = &FileAdapter{Source: args[0]}
+	case "json":
+		a = &JSONAdapter{Source: args[0]}
+	case "yaml":
+		a = &YAMLAdapter{Source: args[0]}
+	default:
+		err = errors.New("invalid adapter: " + name)
 	}
 
-	err = site.CopyAssets(outputDir)
+	return
+}
 
-	if err != nil {
-		panic("Could not copy assets.")
-	}
+// NewGenerator returns the generator for the given page.
+func NewGenerator(a Adapter) Generator {
+	return Generator{Adapter: a}
 }

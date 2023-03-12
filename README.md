@@ -3,11 +3,12 @@ A simple static site generator to build modular pages.
 
 ## Usage
 First, make sure that your theme can be found inside your root directory under
-`/themes/theme-name`. Then inside your root directory run the command:
+`/themes/<name>`. Then inside your root directory run the command:
 
 ``` bash
-snack --input site.json --output public/
+./snack -a json site.json
+./snack -a yaml site.yml
+./snack -a file src/
 ```
 
-This should create a folder in your root directory where you can find your
-website files.
+This will create a new `build` folder in your working directory.
