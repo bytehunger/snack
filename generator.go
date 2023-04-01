@@ -114,6 +114,17 @@ func (g *Generator) GeneratePage(data *PageData) error {
 	for _, section := range data.Page.Sections {
 		basename := section.Type + ".html.tpl"
 
+		sectionData := struct {
+			Section
+			Global *Global
+		}{
+			section, &Global{
+				Host:        data.Site.Host,
+				CurrentURL:  data.Site.Host + "/" + data.Page.Path,
+				CurrentPath: data.Page.Path,
+			},
+		}
+
 		tpl, err := template.New(basename).
 			Funcs(template.FuncMap{"safeHTML": safeHTML}).
 			ParseFiles(
@@ -128,7 +139,7 @@ func (g *Generator) GeneratePage(data *PageData) error {
 			return err
 		}
 
-		err = tpl.Execute(f, section)
+		err = tpl.Execute(f, sectionData)
 
 		if err != nil {
 			return err
