@@ -126,7 +126,7 @@ func (g *Generator) GeneratePage(data *PageData) error {
 		}
 
 		tpl, err := template.New(basename).
-			Funcs(template.FuncMap{"safeHTML": safeHTML}).
+			Funcs(funcMap).
 			ParseFiles(
 				filepath.Join(
 					"themes",
