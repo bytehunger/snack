@@ -10,7 +10,14 @@ func safeHTML(s string) template.HTML {
 }
 
 func isActive(s1, s2 string) bool {
-	return strings.HasPrefix(s2, strings.Trim(s1, "/"))
+	s1 = strings.Trim(s1, "/")
+
+	// special case: root link
+	if s1 == "" {
+		return s1 == s2
+	}
+
+	return strings.HasPrefix(s2, s1)
 }
 
 var funcMap = map[string]any{
