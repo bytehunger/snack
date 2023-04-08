@@ -14,11 +14,6 @@ type Generator struct {
 	Adapter Adapter
 }
 
-type PageData struct {
-	*Site
-	*Page
-}
-
 func (g *Generator) Generate() error {
 	// Get the site from the adapter.
 	site, err := g.Adapter.NewSite()
@@ -28,9 +23,12 @@ func (g *Generator) Generate() error {
 
 	// Start the actual generating
 	for _, page := range site.Pages {
-		err := g.GeneratePage(
-			&PageData{&site, &page},
-		)
+		renderData := RenderData{
+			Site: &site,
+			Page: &page,
+		}
+
+		err := g.GeneratePage(&renderData)
 
 		if err != nil {
 			return err
@@ -61,7 +59,7 @@ func (g *Generator) Generate() error {
 	return nil
 }
 
-func (g *Generator) GeneratePage(data *PageData) error {
+func (g *Generator) GeneratePage(data *RenderData) error {
 	header, err := template.ParseFiles(
 		filepath.Join("themes", data.Site.Theme, "header.html.tpl"),
 	)
@@ -99,31 +97,19 @@ func (g *Generator) GeneratePage(data *PageData) error {
 		return err
 	}
 
-	// Add global sections to page header...
-	data.Page.Sections = append(
-		data.Site.GlobalSections.Header,
-		data.Page.Sections...,
-	)
-
-	// and footer.
-	data.Page.Sections = append(
-		data.Page.Sections,
+	// Concatenate all global and local sections.
+	sections := append(
+		append(
+			data.Site.GlobalSections.Header,
+			data.Page.Sections...,
+		),
 		data.Site.GlobalSections.Footer...,
 	)
 
-	for _, section := range data.Page.Sections {
+	for _, section := range sections {
 		basename := section.Type + ".html.tpl"
 
-		sectionData := struct {
-			Section
-			Global *Global
-		}{
-			section, &Global{
-				Host:        data.Site.Host,
-				CurrentURL:  data.Site.Host + "/" + data.Page.Path,
-				CurrentPath: data.Page.Path,
-			},
-		}
+		data.Section = section
 
 		tpl, err := template.New(basename).
 			Funcs(funcMap).
@@ -139,7 +125,7 @@ func (g *Generator) GeneratePage(data *PageData) error {
 			return err
 		}
 
-		err = tpl.Execute(f, sectionData)
+		err = tpl.Execute(f, data)
 
 		if err != nil {
 			return err
