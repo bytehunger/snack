@@ -1,0 +1,3 @@
+[submodule "examples/adapter-yaml/themes/snack-theme-minimal"]
+	path = examples/adapter-yaml/themes/snack-theme-minimal
+	url = git@github.com:bytehunger/snack-theme-minimal.git

@@ -1,1 +1,4 @@
-snack*
+snack
+snack-v*
+
+examples/**/build
