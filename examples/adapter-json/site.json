@@ -1,0 +1,27 @@
+{
+  "title": "Example snack site",
+  "description": "This site is using the static site generator snack",
+  "host": "",
+  "theme": "snack-theme-minimal",
+  "pages": [
+    {
+      "title": "Hello World",
+      "description": "This site is using the static site generator snack",
+      "sections": [
+        {
+          "type": "headline",
+          "content": {
+            "text": "Hello World!"
+          }
+        },
+        {
+          "type": "article",
+          "content": {
+            "headline": "This is a section",
+            "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vestibulum at ipsum volutpat rutrum. Praesent eleifend ullamcorper elit. Maecenas elementum ex eget mattis egestas. Sed facilisis accumsan nisl aliquam aliquet. Donec ipsum turpis, placerat nec felis id, mattis malesuada ipsum. Pellentesque urna elit, facilisis id eros eget, placerat consequat risus. Suspendisse potenti. Aenean vitae nisl quis orci volutpat scelerisque sit amet vitae felis. Vestibulum vel velit non nunc interdum blandit sed ac urna. Nunc aliquet iaculis tortor, id bibendum libero mollis in. In arcu mi, maximus eget bibendum ac, tristique nec augue. Aenean augue arcu, accumsan a lorem ut, faucibus dictum augue. Vestibulum dictum tempor est, sagittis porttitor elit posuere vitae. Duis commodo, mi quis scelerisque gravida, ipsum magna fringilla dui, id gravida quam arcu vel risus. Etiam a pellentesque felis."
+          }
+        }
+      ]
+    }
+  ]
+}
