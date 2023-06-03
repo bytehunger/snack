@@ -5,4 +5,5 @@ type Page struct {
 	Path        string    `yaml:"path"`
 	Description string    `yaml:"description"`
 	Sections    []Section `yaml:"sections"`
+	NoIndex     bool      `yaml:"noIndex" json:"noIndex"`
 }
