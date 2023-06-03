@@ -10,6 +10,7 @@ type Site struct {
 	Settings       Settings       `yaml:"settings" json:"settings"`
 	Pages          []Page         `yaml:"pages" json:"pages"`
 	GlobalSections GlobalSections `yaml:"globalSections" json:"globalSections"`
+	NoIndex        bool           `yaml:"noIndex" json:"noIndex"`
 }
 
 // GlobalSections is just a helper struct to include global sections
