@@ -1,11 +1,14 @@
 package main
 
 import (
+	"encoding/xml"
 	"html/template"
 	"os"
 	"path/filepath"
 
 	cp "github.com/otiai10/copy"
+
+	"github.com/bytehunger/snack/sitemap"
 )
 
 const outputDir = "build"
@@ -56,7 +59,9 @@ func (g *Generator) Generate() error {
 		}
 	}
 
-	return nil
+	err = g.GenerateSitemap(site)
+
+	return err
 }
 
 func (g *Generator) GeneratePage(data *RenderData) error {
@@ -139,4 +144,45 @@ func (g *Generator) GeneratePage(data *RenderData) error {
 	}
 
 	return nil
+}
+
+func (g *Generator) GenerateSitemap(site Site) error {
+	urls := []sitemap.URL{}
+
+	for _, page := range site.Pages {
+
+		// Do not include noindex pages.
+		if page.NoIndex {
+			continue
+		}
+
+		// Append all pages to the URLSet.
+		urls = append(urls, sitemap.URL{
+			Loc: page.URL(site.Host),
+		})
+	}
+
+	urlset := sitemap.URLSet{
+		URLs:  urls,
+		XMLNS: "http://www.sitemaps.org/schemas/sitemap/0.9",
+	}
+
+	sitemap, err := xml.MarshalIndent(urlset, "", " ")
+
+	if err != nil {
+		return err
+	}
+
+	path := filepath.Join(outputDir, "sitemap.xml")
+	file, err := os.Create(path)
+
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	_, err = file.Write(sitemap)
+
+	return err
 }

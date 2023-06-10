@@ -1,4 +1,4 @@
-module github.com/webhunger-ch/snack
+module github.com/bytehunger/snack
 
 go 1.18
 
