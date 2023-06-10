@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/xml"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -167,22 +166,6 @@ func (g *Generator) GenerateSitemap(site Site) error {
 		XMLNS: "http://www.sitemaps.org/schemas/sitemap/0.9",
 	}
 
-	sitemap, err := xml.MarshalIndent(urlset, "", " ")
-
-	if err != nil {
-		return err
-	}
-
 	path := filepath.Join(outputDir, "sitemap.xml")
-	file, err := os.Create(path)
-
-	if err != nil {
-		return err
-	}
-
-	defer file.Close()
-
-	_, err = file.Write(sitemap)
-
-	return err
+	return urlset.Write(path)
 }
