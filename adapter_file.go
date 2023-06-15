@@ -73,11 +73,19 @@ func (a *FileAdapter) LoadPages() (pages []Page, err error) {
 
 // Takes a file path and returns the corresponding URL path.
 func normalizePagePath(path string) string {
-	return strings.TrimSuffix(
-		strings.TrimSuffix(
-			strings.TrimPrefix(path, "pages/"),
-			filepath.Ext(path),
-		),
-		"index",
-	)
+	// Remove the pages directory
+	np := strings.TrimPrefix(path, "pages/")
+
+	// Remove the "html" file ending
+	np = strings.TrimSuffix(np, filepath.Ext(path))
+
+	// Remove the optional 'index' from the end
+	np = strings.TrimSuffix(np, "index")
+
+	// Add a trailing slash for SEO optimization.
+	if !strings.HasSuffix(np, "/") {
+		np = np + "/"
+	}
+
+	return np
 }
