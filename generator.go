@@ -64,7 +64,7 @@ func (g *Generator) Generate() error {
 }
 
 func (g *Generator) GeneratePage(data *RenderData) error {
-	header, err := template.ParseFiles(
+	header, err := template.New("header.html.tpl").Funcs(funcMap).ParseFiles(
 		filepath.Join("themes", data.Site.Theme, "header.html.tpl"),
 	)
 
@@ -72,7 +72,7 @@ func (g *Generator) GeneratePage(data *RenderData) error {
 		return err
 	}
 
-	footer, err := template.ParseFiles(
+	footer, err := template.New("footer.html.tpl").Funcs(funcMap).ParseFiles(
 		filepath.Join("themes", data.Site.Theme, "footer.html.tpl"),
 	)
 
@@ -155,10 +155,20 @@ func (g *Generator) GenerateSitemap(site Site) error {
 			continue
 		}
 
-		// Append all pages to the URLSet.
-		urls = append(urls, sitemap.URL{
+		url := sitemap.URL{
 			Loc: page.URL(site.Host),
-		})
+		}
+
+		if page.PublishedAt.IsDate() {
+			url.LastMod = page.PublishedAt.String()
+		}
+
+		if page.UpdatedAt.IsDate() {
+			url.LastMod = page.UpdatedAt.String()
+		}
+
+		// Append all pages to the URLSet.
+		urls = append(urls, url)
 	}
 
 	urlset := sitemap.URLSet{

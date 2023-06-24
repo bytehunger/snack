@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"strings"
+	"time"
 )
 
 func safeHTML(s string) template.HTML {
@@ -20,7 +21,13 @@ func isActive(s1, s2 string) bool {
 	return strings.HasPrefix(s2, s1)
 }
 
+func isDate(w W3CDate) bool {
+	t := time.Time(w)
+	return !t.IsZero()
+}
+
 var funcMap = map[string]any{
 	"safeHTML": safeHTML,
 	"isActive": isActive,
+	"isDate":   isDate,
 }
