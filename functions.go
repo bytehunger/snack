@@ -11,10 +11,8 @@ func safeHTML(s string) template.HTML {
 }
 
 func isActive(s1, s2 string) bool {
-	s1 = strings.Trim(s1, "/")
-
 	// special case: root link
-	if s1 == "" {
+	if s1 == "/" {
 		return s1 == s2
 	}
 

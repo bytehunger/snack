@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -60,7 +62,11 @@ func (g *Generator) Generate() error {
 
 	err = g.GenerateSitemap(site)
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	return g.GenerateContentJSON(site)
 }
 
 func (g *Generator) GeneratePage(data *RenderData) error {
@@ -143,6 +149,38 @@ func (g *Generator) GeneratePage(data *RenderData) error {
 	}
 
 	return nil
+}
+
+func (g *Generator) GenerateContentJSON(site Site) error {
+	type ContentPage struct {
+		Title       string    `json:"title"`
+		Path        string    `json:"path"`
+		Description string    `json:"description"`
+		Sections    []Section `json:"-"`
+		NoIndex     bool      `json:"-"`
+		PublishedAt W3CDate   `json:"publishedAt`
+		UpdatedAt   W3CDate   `json:"updatedAt"`
+	}
+
+	pages := []ContentPage{}
+
+	for _, page := range site.Pages {
+
+		if page.NoIndex {
+			continue
+		}
+
+		pages = append(pages, ContentPage(page))
+	}
+
+	content, err := json.Marshal(pages)
+
+	if err != nil {
+		return err
+	}
+
+	path := filepath.Join(outputDir, "content.json")
+	return ioutil.WriteFile(path, content, 0644)
 }
 
 func (g *Generator) GenerateSitemap(site Site) error {

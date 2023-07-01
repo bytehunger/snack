@@ -74,7 +74,7 @@ func (a *FileAdapter) LoadPages() (pages []Page, err error) {
 // Takes a file path and returns the corresponding URL path.
 func normalizePagePath(path string) string {
 	// Remove the pages directory
-	np := strings.TrimPrefix(path, "pages/")
+	np := strings.TrimPrefix(path, "pages")
 
 	// Remove the "html" file ending
 	np = strings.TrimSuffix(np, filepath.Ext(path))

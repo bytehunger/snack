@@ -15,7 +15,7 @@ type RenderData struct {
 
 // CurrentURL returns the current URL with path.
 func (rd *RenderData) CurrentURL() string {
-	return rd.Site.Host + "/" + rd.Page.Path
+	return rd.Site.Host + rd.Page.Path
 }
 
 // CurrentPath returns the current path.

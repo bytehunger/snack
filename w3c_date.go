@@ -26,7 +26,11 @@ func (d W3CDate) IsDate() bool {
 }
 
 func (d *W3CDate) MarshalJSON() ([]byte, error) {
-	return []byte(d.String()), nil
+	if !d.IsDate() {
+		return []byte("null"), nil
+	}
+
+	return []byte(`"` + d.String() + `"`), nil
 }
 
 func (d *W3CDate) MarshalYAML() ([]byte, error) {
