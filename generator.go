@@ -117,6 +117,12 @@ func (g *Generator) GeneratePage(data *RenderData) error {
 	)
 
 	for _, section := range sections {
+
+		// Don't render inactive sections.
+		if section.Inactive {
+			continue
+		}
+
 		basename := section.Type + ".html.tpl"
 
 		data.Section = section
