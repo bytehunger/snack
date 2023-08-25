@@ -86,14 +86,14 @@ func (g *Generator) GeneratePage(data *RenderData) error {
 		return err
 	}
 
-	path := filepath.Join(outputDir, data.Page.Path)
+	path := filepath.Join(outputDir, data.Page.Pathname())
 	err = os.MkdirAll(path, 0755)
 
 	if err != nil {
 		return err
 	}
 
-	f, err := os.Create(filepath.Join(path, "index.html"))
+	f, err := os.Create(filepath.Join(path, data.Page.Filename()))
 
 	if err != nil {
 		return err

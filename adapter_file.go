@@ -82,8 +82,9 @@ func normalizePagePath(path string) string {
 	// Remove the optional 'index' from the end
 	np = strings.TrimSuffix(np, "index")
 
-	// Add a trailing slash for SEO optimization.
-	if !strings.HasSuffix(np, "/") {
+	// Add a trailing slash for SEO optimization - only if it doesn't already
+	// exist and we are not dealing with a path with file extension.
+	if !strings.HasSuffix(np, "/") && filepath.Ext(np) == "" {
 		np = np + "/"
 	}
 

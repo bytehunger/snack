@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/url"
+	"path/filepath"
+	"strings"
 )
 
 type Page struct {
@@ -25,4 +27,31 @@ func (p *Page) URL(host string) string {
 	url.Path = p.Path
 
 	return url.String()
+}
+
+// HasFileExtension checks if the URL path ends with an file extension
+// like .html or .php.
+func (p *Page) HasFileExtension() bool {
+	return filepath.Ext(p.Path) != ""
+}
+
+// Pathname returns the right 'subdirectory' string.
+func (p *Page) Pathname() string {
+	if p.HasFileExtension() {
+		return strings.TrimSuffix(p.Path, p.lastPathElement())
+	}
+
+	return p.Path
+}
+
+func (p *Page) Filename() string {
+	if p.HasFileExtension() {
+		return p.lastPathElement()
+	}
+
+	return "index.html"
+}
+
+func (p *Page) lastPathElement() string {
+	return p.Path[strings.LastIndex(p.Path, "/")+1:]
 }
