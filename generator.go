@@ -41,6 +41,7 @@ func (g *Generator) Generate() error {
 
 	assetsPath := filepath.Join("themes", site.Theme, "assets")
 
+	// Copy the themes assets folder if present.
 	if _, err = os.Stat(assetsPath); !os.IsNotExist(err) {
 		err = cp.Copy(
 			assetsPath,
@@ -52,8 +53,18 @@ func (g *Generator) Generate() error {
 		}
 	}
 
+	// Copy a pictures folder if present.
 	if _, err := os.Stat("pictures"); !os.IsNotExist(err) {
 		err = cp.Copy("pictures", filepath.Join(outputDir, "pictures"))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	// Copy a data folder if present.
+	if _, err := os.Stat("data"); !os.IsNotExist(err) {
+		err = cp.Copy("data", filepath.Join(outputDir, "data"))
 
 		if err != nil {
 			return err
