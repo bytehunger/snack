@@ -43,8 +43,11 @@ func (a *FileAdapter) LoadPages() (pages []Page, err error) {
 			return err
 		}
 
-		// Ignore directories
-		if info.IsDir() {
+		// Ignore non-yaml files
+		if info.IsDir() ||
+			strings.HasSuffix(info.Name(), ".yaml") ||
+			strings.HasSuffix(info.Name(), ".yml") {
+
 			return nil
 		}
 
