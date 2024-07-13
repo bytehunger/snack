@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"html/template"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -175,7 +174,7 @@ func (g *Generator) GenerateContentJSON(site Site) error {
 		Description string    `json:"description"`
 		Sections    []Section `json:"-"`
 		NoIndex     bool      `json:"-"`
-		PublishedAt W3CDate   `json:"publishedAt`
+		PublishedAt W3CDate   `json:"publishedAt"`
 		UpdatedAt   W3CDate   `json:"updatedAt"`
 	}
 
@@ -197,7 +196,7 @@ func (g *Generator) GenerateContentJSON(site Site) error {
 	}
 
 	path := filepath.Join(outputDir, "content.json")
-	return ioutil.WriteFile(path, content, 0644)
+	return os.WriteFile(path, content, 0644)
 }
 
 func (g *Generator) GenerateSitemap(site Site) error {
