@@ -12,7 +12,7 @@ type Page struct {
 	Description string    `yaml:"description" json:"description"`
 	Sections    []Section `yaml:"sections" json:"sections"`
 	NoIndex     bool      `yaml:"noIndex" json:"noIndex"`
-	PublishedAt W3CDate   `yaml:"publishedAt" json:"publishedAt`
+	PublishedAt W3CDate   `yaml:"publishedAt" json:"publishedAt"`
 	UpdatedAt   W3CDate   `yaml:"updatedAt" json:"updatedAt"`
 }
 
